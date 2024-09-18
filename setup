@@ -1,0 +1,74 @@
+#!/usr/bin/env zsh
+
+# Write a welcome message in cyan color letting the user know what this script does
+echo "\n🚀 \033[1m\033[36mWelcome to Toshy's Mac Dev Setup\033[0m\n";
+echo "\033[1m\033[33mThis script will install the following tools and apps:\033[0m\n";
+echo "🍺 Homebrew (package manager for macOS)";
+echo "🖱 iTerm2, Visual Studio Code, Google Chrome, Firefox Developer Edition";
+echo "💻 Git, Zsh Completions, Tree, fnm";
+echo "⬢ Node LTS";
+echo "🔧 Eslint";
+
+
+
+
+# Install homebrew
+# Write a welcome message in cyan 
+echo "\n🍺 \033[1mInstalling Homebrew…\033[0m";
+echo "(that's a package manager for macOS)\n";
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";
+
+# Install common tools
+echo "\n💻 \033[1mInstalling Command Line Tools…\033[0m";
+echo "(using the Homebrew package manager)\n";
+
+for x in gh git zsh-completions tree fnm; do brew install $x; done;
+#brew install fzf && $(brew --prefix)/opt/fzf/install;
+
+echo "Installed command line tools:" && brew list --formulae -1;
+
+
+# Install macOS apps
+echo "\n🖱 \033[1mInstalling macOS Apps…\033[0m";
+echo "(using the Homebrew package manager)\n";
+
+brew tap homebrew/cask-versions;
+for x in iterm2 visual-studio-code; do brew install --cask $x; done;
+brew install --cask firefox-developer-edition --lang=en-US;
+
+echo "Installed macOS apps:" && brew list --cask -1;
+
+
+# Set up node lts
+echo "\n⬢ \033[1mInstalling Node LTS…\033[0m";
+echo "(Node is a JavaScript runtime used for local development)\n";
+
+eval "$(fnm env)";
+fnm install lts-latest;
+fnm alias lts-latest default;
+fnm use default;
+echo "Installed Node Version:";
+node -v;
+
+
+# install global node packages
+echo "\n⬢ \033[1mInstalling Global Node Modules…\033[0m";
+echo "(using npm)\n";
+
+npm i -g eslint@8
+
+echo "Installed global node modules:" && npm list -g --depth=0;
+
+
+# configurations
+echo "\n⚙️ \033[1mInstalling configurations…\033[0m";
+echo "(These set up your command line to work and look nicer)\n";
+
+# iTerm shell integration
+curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash
+
+echo "\n✨ \033[1m…all done!\033[0m";
+echo "You can now switch to the iTerm Terminal by pressing \033[1m⌘\033[0m + \033[1mSpace\033[0m and search for \"iTerm\".\n";
+echo "We have some suggestions for nicer macOS settings which you can apply by running:";
+echo "\033[0;36mzsh <(curl -s https://raw.githubusercontent.com/neuefische/web-setup/main/setup-macos)\033[0m\n";
